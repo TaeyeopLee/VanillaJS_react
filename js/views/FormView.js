@@ -8,7 +8,7 @@ class FormView extends View {
     this.inputElement = qs("[type=text]", this.element)
     this.resetElement = qs("[type=reset]", this.element)
     this.showResetButton(false);
-    this.bindEvents() // 1: 뷰에서 발생하는 이벤트 처리기 연결용 bindEvents()메서드 호출
+    this.bindEvents()
   }
   
   showResetButton(visible = true) {
@@ -16,10 +16,16 @@ class FormView extends View {
   }
 
   bindEvents() {
-    on(this.inputElement, "keyup", event => this.handleKeyup(event)) // 2: 미리 저장해 둔 inputElement에서 keyup 이벤트가 발생하면 handleKeyup() 메서드를 호출하는 함수를 연결.
+    on(this.inputElement, "keyup", event => this.handleKeyup(event))
+    this.on("submit", event => event.preventDefault()) // 1: 엔터를 입력하면 화면갱신이 되므로, 폼 제출을 막아서 화면 갱신을 막는다.
   }
 
   handleKeyup(event) {
+    const ENTER_CODE = 13
+    // 2: 이벤트에서 키코드를 조사해서 엔터키인지 비교한다.
+    if (event.keyCode === ENTER_CODE) {
+      this.emit("@submit", { value })
+    }
     const { value } = this.inputElement;
     this.showResetButton(value.length > 0) // 3: 입력한 문자열의 길이에 따라 버튼의 노출 여부를 결정. 입력한 문자가 있으면 x 버튼을 표시하고 그렇지 않으면 숨기도록 구현.
   }
