@@ -1,5 +1,14 @@
-class Store {
-    constructor(storage) {
-        this.storage = storage // 1 : 생성 시점에 데이터 저장소 객체를 받아 내부에 관리한다.
-    }
+export default class Store {
+  constructor(storage) {
+    if (!storage) throw "no storage";
+    this.storage = storage;
+
+    this.searchKeyword = "";
+    this.searchResult = [];
+  }
+
+  search(keyword) {
+    this.searchKeyword = keyword;
+    this.searchResult = this.storage.productData.filter((product) => product.name.includes(keyword));
+  }
 }

@@ -45,7 +45,7 @@ export function formatRelativeDate(date = new Date()) {
   if (diff < A_MINUTE) return `${Math.floor(diff / 1000)}초 전`;
   if (diff < A_HOUR) return `${Math.floor(diff / 1000 / 60)}분 전`;
   if (diff < A_DAY) return `${Math.floor(diff / 1000 / 60 / 24)}시간 전`;
-  return date.toLocaleString("ko-kr", {
+  return date.toLocaleString("ko-KR", {
     hour12: false,
     dateStyle: "medium",
   });
@@ -60,3 +60,6 @@ export function createPastDate(date = 1, now = new Date()) {
   return createPastDate(date - 1, yesterday);
 }
 
+export function createNextId(list = []) {
+  return Math.max(...list.map((item) => item.id)) + 1;
+}

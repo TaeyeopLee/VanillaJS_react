@@ -1,6 +1,6 @@
 import { emit, on } from "../helper.js";
 
-class View {
+export default class View {
   constructor(element) {
     this.element = element; // 1: 생성 시점에 화면 출력을 위한 돔 엘리먼트를 받아서 저장한다.
     this.originalDisplay = this.element.style.displa || "" // 2: 뷰를 화면에 보이고 숨기기 위해 스타일의 display속성을 사용할 것인데 이걸 위해 원래 값을 저장해 둔다.
