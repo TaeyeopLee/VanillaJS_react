@@ -1,9 +1,8 @@
-import View from './View';
-import qs, { on } from '../helper';
+import View from './View.js';
+import { on, qs } from "../helpers.js";
 
 export default class SearchFormView extends View {
   constructor() {
-    console.log(tag, "constructor");
 
     super(qs("#search-form-view"));
 

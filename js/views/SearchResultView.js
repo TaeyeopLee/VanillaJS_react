@@ -1,4 +1,4 @@
-import { qs } from '../helper.js';
+import { qs } from '../helpers.js';
 import View from './View.js';
 
 export default class ResultView extends View {

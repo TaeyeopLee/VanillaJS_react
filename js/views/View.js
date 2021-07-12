@@ -1,4 +1,4 @@
-import { emit, on } from "../helper.js";
+import { emit, on } from "../helpers.js";
 
 export default class View {
   constructor(element) {
