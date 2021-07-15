@@ -36,5 +36,6 @@ export default class Controller {
 
     this.tabView.show() // 2: 일반적인 조건일 떄는 탭뷰를 보여주고
     this.searchResultView.hide(); // 3: 검색결과를 숨긴다.
+    this.tabView.show(this.store.selectedTab) // 1 : 선택된 탭을 탭뷰에게 전달한다. 탭뷰는 이 정보를 가지고 선택된 탭을 표시할 것이다.
   }
 }

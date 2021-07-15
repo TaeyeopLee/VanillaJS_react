@@ -1,3 +1,4 @@
+import { qsAll } from "../helpers";
 import View from "./View";
 
 export const TabType = {
@@ -12,20 +13,24 @@ const TabLabel = {
 
 export default class TabView extends View {
   constructor() {
-    super(qs("#tab-view")) // 1: 아이디로 돔 엘리먼트를 찾아서 View() 생성자 함수를 호출해서 this.element에 저장한다.
+    super(qs("#tab-view"))
 
-    this.template = new Template() // 2: 탭 출력을 위한 탬플릿 객체도 만들어 저장한다.
+    this.template = new Template()
   }
+  // 1: 탭정보를 인자로 받도록 수정한다.
+  show(tab) {
+    this.element.innerHTML = this.template.getTabList()
 
-  show() { // 부모 클래스의 show 메소드를 재정의한다.
-    this.element.innerHTML = this.template.getTabList() // 3: 화면에 노출하기 전에 템플릿 객체로부터 탭 리스트 마크업 문자열을 가져와 돔에 추가하기 위해서.
+    // 2: li 엘리먼트 중 선택한 탭 엘리먼트를 찾는데 data-tab 속성값과 인자의 tab 문자열 값을 비교해 일치하는 녀석에서 active 클래스 이름을 붙여준다.
+    qsAll("li", this.element).forEach(li => {
+      li.className = li.dataset.tab === tab ? "active" : ""
+    })
 
     super.show();
   }
 }
 
 class Template {
-  // 1: 탭 하나를 출력하기 위한 HTML 문자열을 반환하는 것이 getTab 메소드.
   _getTab({ key, label }) {
     return `<li data-tab="${key}">${label}`;
   }
@@ -34,10 +39,10 @@ class Template {
   getTabList() {
     return `
       <ul class="tabs">
-        ${Object.values(Tab) // 3: 탭 키를 배열로 만들고
-          .map(key => ({ key, labe: TabLabel[key]})) // 4: key, label로 구성된 객체로 변환한 뒤
+        ${Object.values(Tab)
+          .map(key => ({ key, labe: TabLabel[key]}))
           .map(this._getTab)
-          .join("") // 5: getTab메소드로 탭을 위한 마크업 문자열을 생성한다.
+          .join("")
         }
       </ul>
     `
