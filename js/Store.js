@@ -1,4 +1,4 @@
-import { Tab } from "./views/TabView.js";
+import { TabType } from "./views/TabView.js";
 export default class Store {
   constructor(storage) {
     if (!storage) throw "no storage";
@@ -6,7 +6,7 @@ export default class Store {
 
     this.searchKeyword = "";
     this.searchResult = [];
-    this.selectedTab = Tab.KEYWORD // 1:선택한 탭을 저장하기 위한 변수를 추가하고 초기값을 tab.keyword로 지정했다.
+    this.selectedTab = TabType.KEYWORD // 1:선택한 탭을 저장하기 위한 변수를 추가하고 초기값을 tab.keyword로 지정했다.
   }
 
   search(keyword) {

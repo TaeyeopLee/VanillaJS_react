@@ -1,5 +1,5 @@
-import { qsAll } from "../helpers";
-import View from "./View";
+import { qsAll } from "../helpers.js";
+import View from "./View.js";
 
 export const TabType = {
   KEYWORD: "KEYWORD",
