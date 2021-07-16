@@ -1,11 +1,15 @@
+import { TabType } from "./views/TabView";
+
 export default class Controller {
-  constructor(store, { searchFormView, searchResultView, tabView }) {
+  constructor(store, { searchFormView, searchResultView, tabView, keywordListView }) {
     this.store = store;
 
     this.searchFormView = searchFormView;
     this.searchResultView = searchResultView;
     this.tabView = tabView;
-    this.subscribeViewEvents()
+    this.keywordListView = keywordListView;
+
+    this.subscribeViewEvents();
   }
 
   subscribeViewEvents() {
@@ -41,8 +45,18 @@ export default class Controller {
       return;
     }
 
-    this.tabView.show() 
-    this.searchResultView.hide();
     this.tabView.show(this.store.selectedTab)
+    // 1: 추천검색어인 경우
+    if (this.store.selectedTab === TabType.KEYWORD) {
+      this.keywordListView.show(this.store.getKeywordList()); // 3: 스토어에서 키워드 목록을 가져와 뷰에 전달해 화면에 노출한다.
+    }
+    // 2: 최근 검색어인 경우
+    else if (this.store.selectedTab === TabType.HISTORY) {
+      this.keywordListView.hide() // 4: keywordView를 숨긴다.
+    }
+    else {
+      throw "사용할 수 없는 탭";
+    }
+    this.searchResultView.hide();
   }
 }
