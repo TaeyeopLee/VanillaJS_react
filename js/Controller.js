@@ -11,7 +11,14 @@ export default class Controller {
   subscribeViewEvents() {
     this.formView
       .on("@submit", event => this.search(event.detail.value))
-      .on("@reset", _ => this.reset()) // 1: reset() 메소드 호출
+      .on("@reset", _ => this.reset())
+    
+    this.tabView.on("@change", event => this.changeTab(event.detail.value)) // 1: "@change" 이벤트를 구독해서 changeTab메소드로 변경된 탭 정보를 전달한다.
+  }
+
+  changeTab(tab) {
+    this.store.selectedTab = tab; // 2: 선택된 탭 데이터를 어플리케이션 상태를 관리하는 스토어에 저장한다.
+    this.render(); // 3: 다시 화면에 그리기 위해 render를 호출한다.
   }
 
   search(keyword) {
@@ -30,12 +37,12 @@ export default class Controller {
   render() {
     if (this.store.searchKeyword.length > 0) {
       this.searchResultView.show(this.store.searchResult);
-      this.tabView.hide(); // 1: 검색어를 입력했을 때는 검색결과를 보여주고 탭뷰는 숨긴다.
+      this.tabView.hide();
       return;
     }
 
-    this.tabView.show() // 2: 일반적인 조건일 떄는 탭뷰를 보여주고
-    this.searchResultView.hide(); // 3: 검색결과를 숨긴다.
-    this.tabView.show(this.store.selectedTab) // 1 : 선택된 탭을 탭뷰에게 전달한다. 탭뷰는 이 정보를 가지고 선택된 탭을 표시할 것이다.
+    this.tabView.show() 
+    this.searchResultView.hide();
+    this.tabView.show(this.store.selectedTab)
   }
 }

@@ -14,5 +14,5 @@ function main() {
     searchResultView: new SearchResultView(),
     tabView: new TabView(),
   };
-  new Controller(store, views) // 3: 1,2에서 만든 스토어, 뷰 객체를 컨트롤러 생성자 함수에 전달해서 컨트롤러 객체를 만든다.
+  new Controller(store, views)
 }

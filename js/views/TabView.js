@@ -1,4 +1,4 @@
-import { qsAll } from "../helpers.js";
+import { delegate, qsAll } from "../helpers.js";
 import View from "./View.js";
 
 export const TabType = {
@@ -16,12 +16,21 @@ export default class TabView extends View {
     super(qs("#tab-view"))
 
     this.template = new Template()
+    this.bindEvents() // 1: 엘리먼트에서 발생하는 이벤트를 핸들러와 연결하는 bindEvents 메소드를 호출
   }
-  // 1: 탭정보를 인자로 받도록 수정한다.
+
+  bindEvents() {
+    delegate(this.element, "click", "li", event => this.handleClick(event)) // 2: 자식 엘리먼트에서 li 에서 "click" 이벤트가 발생할 때 handleClick 메소드를 호출하도록 핸드러를 연결한다.
+  }
+
+  handleClick(event) {
+    const value = event.target.dataset.tab // 3: 이벤트 객체를 받아 클릭된 요소의 탭 정보를 조회한다.
+    this.emit("@change", { value }); // 4: "@change" 이름으로 이벤트를 발행한다.
+  }
+
   show(tab) {
     this.element.innerHTML = this.template.getTabList()
 
-    // 2: li 엘리먼트 중 선택한 탭 엘리먼트를 찾는데 data-tab 속성값과 인자의 tab 문자열 값을 비교해 일치하는 녀석에서 active 클래스 이름을 붙여준다.
     qsAll("li", this.element).forEach(li => {
       li.className = li.dataset.tab === tab ? "active" : ""
     })

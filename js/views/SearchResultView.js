@@ -1,18 +1,20 @@
-import { qs } from '../helpers.js';
-import View from './View.js';
+import { qs } from "../helpers.js";
+import View from "./View.js";
 
 export default class ResultView extends View {
   constructor() {
-    super(qs("#search-result")) // 1
+    super(qs("#search-result"));
 
-    this.template = new Template() // 4
+    this.template = new Template();
   }
 
   show(data = []) {
-    // 2
-    this.element.innerHTML = data.length > 0 ? this.template.getList(data) : this.template.getEmptyMessage()
-    
-    super.show(); // 3
+    this.element.innerHTML =
+      data.length > 0
+        ? this.template.getList(data)
+        : this.template.getEmptyMessage();
+
+    super.show();
   }
 }
 
