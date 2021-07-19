@@ -24,7 +24,14 @@ export default class Controller {
 
     this.tabView.on("@change", (event) => this.changeTab(event.detail.value));
     this.keywordListView.on("@click", (event) => this.search(event.detail.value));
-    this.historyListView.on("@click", (event) => this.search(event.detail.value)); // 1: search메소드에 최근검색어를 전달한다.
+    this.historyListView
+      .on("@click", (event) => this.search(event.detail.value))
+      .on("@remove", (event) => this.removeHistory(event.detail.value)); // 1: 히스토리뷰에서 삭제 이벤트가 발생하면 삭제대상 키워드를 받아서 removeHistory에 전달.
+  }
+
+  removeHistory(keyword) {
+    this.store.removeHistory(keyword); // 2: store에서 해당 키워드를 제거하고
+    this.render() // 3: 화면을 다시 그린다.
   }
 
   changeTab(tab) {

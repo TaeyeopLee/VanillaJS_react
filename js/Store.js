@@ -18,8 +18,14 @@ export default class Store {
     return this.storage.keywordData;
   }
 
-  // 1: 검색 이력을 가져오는 getHistoryList 메소드
   getHistoryList() {
     return this.storage.historyData.sort(this._sortHistory);
+  }
+
+  // 1: 삭제할 키워드를 받아 데이터에서 제거하는 removeHistory
+  removeHistory(keyword) {
+    this.storage.historyData = this.storage.historyData.filter(
+      history => history.keyword !== keyword
+    );
   }
 }
