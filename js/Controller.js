@@ -1,10 +1,17 @@
-import { TabType } from "./views/TabView";
+import { TabType } from "./views/TabView.js";
+
+const tag = "[Controller]";
 
 export default class Controller {
   constructor(
     store,
-    { searchFormView, searchResultView, tabView, keywordListView, 
-      historyListView, }
+    {
+      searchFormView,
+      searchResultView,
+      tabView,
+      keywordListView,
+      historyListView,
+    }
   ) {
     this.store = store;
 
@@ -15,23 +22,35 @@ export default class Controller {
     this.historyListView = historyListView;
 
     this.subscribeViewEvents();
+    this.render();
   }
 
   subscribeViewEvents() {
-    this.formView
+    this.searchFormView
       .on("@submit", (event) => this.search(event.detail.value))
-      .on("@reset", (_) => this.reset());
+      .on("@reset", () => this.reset());
 
     this.tabView.on("@change", (event) => this.changeTab(event.detail.value));
-    this.keywordListView.on("@click", (event) => this.search(event.detail.value));
+
+    this.keywordListView.on("@click", (event) =>
+      this.search(event.detail.value)
+    );
+
     this.historyListView
       .on("@click", (event) => this.search(event.detail.value))
-      .on("@remove", (event) => this.removeHistory(event.detail.value)); // 1: 히스토리뷰에서 삭제 이벤트가 발생하면 삭제대상 키워드를 받아서 removeHistory에 전달.
+      .on("@remove", (event) => this.removeHistory(event.detail.value));
   }
 
-  removeHistory(keyword) {
-    this.store.removeHistory(keyword); // 2: store에서 해당 키워드를 제거하고
-    this.render() // 3: 화면을 다시 그린다.
+  search(keyword) {
+
+    this.store.search(keyword);
+    this.render();
+  }
+
+  reset() {
+    this.store.searchKeyword = "";
+    this.store.searchResult = [];
+    this.render();
   }
 
   changeTab(tab) {
@@ -39,45 +58,36 @@ export default class Controller {
     this.render();
   }
 
-  search(keyword) {
-    console.log(keyword);
-    this.store.search(keyword);
-    this.render();
-  }
-
-  reset() {
-    console.log("@reset");
-    this.store.searchResult = [];
-    this.store.searchKeyword = "";
+  removeHistory(keyword) {
+    this.store.removeHistory(keyword);
     this.render();
   }
 
   render() {
     if (this.store.searchKeyword.length > 0) {
-      return this.renderSearchResult() // 1: 7번으로 분리.
+      return this.renderSearchResult();
     }
 
-    this.searchResultView.hide() // 2: 기본화면에서 검색결과를 숨기고
-    this.tabView.show(this.store.selectedTab); // 3: 탭을 노출하고 선택된 탭을 표시한다.
-
+    this.tabView.show(this.store.selectedTab);
     if (this.store.selectedTab === TabType.KEYWORD) {
       this.keywordListView.show(this.store.getKeywordList());
-      this.historyListView.hide(); // 4: 키워드탭을 선택하면 최근 검색어를 숨기고,
+      this.historyListView.hide();
     } else if (this.store.selectedTab === TabType.HISTORY) {
-      this.keywordListView.hide(); // 5: 최근검색어를 선택하면 키워드 탭을 숨기고
-      this.historyListView.show(this.store.getHistoryList()); // 6: 최근 검색어 이력을 불러와 historyListView.show에 전달한다.
+      this.keywordListView.hide();
+      this.historyListView.show(this.store.getHistoryList());
     } else {
-      throw "사용할 수 없는 탭";
+      throw "사용할 수 없는 탭입니다.";
     }
+
     this.searchResultView.hide();
   }
 
-  // 7: 검색결과 출력하는 부분을 따로 분리
   renderSearchResult() {
-    this.formView.show(this.store.searchKeyword);
-    this.searchResultView.show(this.store.searchResult);
+    this.searchFormView.show(this.store.searchKeyword);
     this.tabView.hide();
     this.keywordListView.hide();
     this.historyListView.hide();
+
+    this.searchResultView.show(this.store.searchResult);
   }
 }

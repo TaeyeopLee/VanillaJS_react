@@ -1,9 +1,8 @@
-import View from './View.js';
 import { on, qs } from "../helpers.js";
+import View from "./View.js";
 
 export default class SearchFormView extends View {
   constructor() {
-
     super(qs("#search-form-view"));
 
     this.inputElement = qs("[type=text]", this.element);
@@ -41,5 +40,12 @@ export default class SearchFormView extends View {
 
   handleReset() {
     this.emit("@reset");
+  }
+
+  show(value = "") {
+    this.inputElement.value = value;
+    this.showResetButton(this.inputElement.value.length > 0);
+
+    super.show();
   }
 }
