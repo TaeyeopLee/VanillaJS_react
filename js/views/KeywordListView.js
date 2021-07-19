@@ -2,9 +2,11 @@ import View from "./View.js";
 import { delegate, qs } from "../helpers.js";
 
 export default class KeywordListView extends View {
-  constructor() {
-    super(qs("#keyword-view"));
-    this.template = new Template();
+  constructor(element = qs("#keyword-view"), template = new Template()) {
+    // super(qs("#keyword-view"));
+    super(element);
+
+    this.template = template;
     this.bindEvents(); // 1: 생성 시점에 이벤트를 바인딩.
   }
 
